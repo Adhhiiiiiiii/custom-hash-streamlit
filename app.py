@@ -24,57 +24,96 @@ def custom_hash(text, size=32):
     hash_hex = ''.join(f'{v:02x}' for v in hash_arr)
     return hash_hex[:size]  # ensure fixed size
 
-
-# Set up Streamlit page
+# Set up Streamlit page with themes
 st.set_page_config(page_title="Custom Hash Function vs SHA-256", layout="wide")
 
 # Title and description
-st.title("Custom Hash Function vs SHA-256")
+st.title("🔒 Custom Hash Function vs SHA-256")
 st.subheader("A web app to compare a custom hash function with SHA-256.")
-st.markdown("""
-    - Input any string to get its **Custom Hash** and compare it with the **SHA-256** hash.
-    - The custom hash is generated based on ASCII manipulation, modular arithmetic, and compression.
-    - **Small input changes** lead to **drastic differences** in the hash.
-    """)
 
 # Sidebar with instructions and settings
 with st.sidebar:
-    st.header("Instructions")
+    st.header("📚 Instructions")
     st.markdown("""
-        1. Enter a string in the text box below.
+        1. **Enter** a string in the text box below.
         2. Click **Generate Hash** to see the custom hash and compare it with SHA-256.
-        3. Check the results in real-time.
+        3. **Small input changes** lead to **drastic differences** in the hash.
     """)
-
-# User input: Text box for input string
-input_text = st.text_area("Enter the string to hash", height=150, value="hello")
-
-# Button to trigger the hash generation
-if st.button("Generate Hash"):
-    # Generate the custom hash
-    custom_hashed = custom_hash(input_text)
     
-    # Generate the SHA-256 hash using hashlib
-    sha256_hashed = hashlib.sha256(input_text.encode()).hexdigest()[:32]
-    
-    # Display the results
-    st.write(f"### Custom Hash for '{input_text}':")
-    st.code(custom_hashed, language='text')
-    
-    st.write(f"### SHA-256 Hash for '{input_text}':")
-    st.code(sha256_hashed, language='text')
+    # Theme selector
+    theme = st.radio("Select Theme", ["Light", "Dark"], index=0)
 
-    # Show a comparison
-    if custom_hashed == sha256_hashed:
-        st.success("The hashes match!")
+    if theme == "Dark":
+        st.markdown("""
+            <style>
+            .streamlit-expanderHeader {
+                background-color: #333;
+                color: white;
+            }
+            </style>
+        """, unsafe_allow_html=True)
     else:
-        st.warning("The hashes do not match!")
+        st.markdown("""
+            <style>
+            .streamlit-expanderHeader {
+                background-color: #fff;
+                color: #000;
+            }
+            </style>
+        """, unsafe_allow_html=True)
 
-    # Visual separator
-    st.markdown("---")
+# Input validation and text box
+input_text = st.text_area("🔑 Enter the string to hash:", height=150, value="hello")
 
-# Show footer message
+# Custom styling for the button
 st.markdown("""
-    ### By Adhiyaman B
-    GitHub: [https://github.com/Adhhiiiiiiii/custom-hash-streamlit]
+    <style>
+    .stButton>button {
+        background-color: #4CAF50; /* Green */
+        color: white;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .stTextArea textarea {
+        font-family: 'Courier New', Courier, monospace;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Input validation: Check if the user input is empty
+if input_text.strip() == "":
+    st.warning("⚠️ Please enter a string to hash.")
+else:
+    # Button to trigger the hash generation
+    if st.button("Generate Hash"):
+        # Generate the custom hash
+        custom_hashed = custom_hash(input_text)
+        
+        # Generate the SHA-256 hash using hashlib
+        sha256_hashed = hashlib.sha256(input_text.encode()).hexdigest()[:32]
+        
+        # Display the results
+        st.write(f"### Custom Hash for '{input_text}':")
+        st.code(custom_hashed, language='text')
+        
+        st.write(f"### SHA-256 Hash for '{input_text}':")
+        st.code(sha256_hashed, language='text')
+
+        # Show a comparison
+        if custom_hashed == sha256_hashed:
+            st.success("✔️ The hashes match!")
+        else:
+            st.warning("❌ The hashes do not match!")
+
+        # Visual separator
+        st.markdown("---")
+
+# Footer section with GitHub link
+st.markdown("""
+    ### By Priyanksha Das
+    USN: [Add your USN here]
+    GitHub: [Add your GitHub link here]
 """)
