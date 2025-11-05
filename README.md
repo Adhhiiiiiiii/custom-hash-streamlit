@@ -90,4 +90,4 @@ streamlit==1.11.1
 
 ## License
 
-This project is open-source and educational purpose available to all.
+This project is open-source and designed for educational purposes, providing accessible insights into hash functions for all users.
