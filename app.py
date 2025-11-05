@@ -92,5 +92,5 @@ else:
 # Footer section with GitHub link
 st.markdown("""
     ### By Adhiyaman Babu
-    GitHub: [Visit my GitHub repository](https://github.com/Adhhiiiiiiii/custom-hash-streamlit)
+    GitHub: [ Repository Link](https://github.com/Adhhiiiiiiii/custom-hash-streamlit)
 """)
