@@ -1,81 +1,80 @@
-# app.py
 import streamlit as st
 import hashlib
 
-# -----------------------------
-# Custom Hash Function
-# -----------------------------
-def custom_hash(input_string, hash_size=32):
-    hash_value = 0
-    for char in input_string:
-        char_value = ord(char)
-        hash_value = (hash_value << 5) + hash_value + char_value  # mixing step
-        hash_value = hash_value % (10 ** hash_size)  # modular compression
-    return hex(hash_value)[2:].zfill(hash_size)  # hex + zero-fill
+# Custom hash function
+def custom_hash(text, size=32):
+    if not text:
+        text = " "  # handle empty string
+    
+    # Step 1: Convert to ASCII and manipulate
+    values = [ord(c) for c in text]
+    
+    # Step 2: Mix ASCII values with modular arithmetic
+    mixed = []
+    for i, v in enumerate(values):
+        val = (v * (i + 3)**2 + (i * 7)) % 257
+        mixed.append(val)
+    
+    # Step 3: Compress to fixed length (e.g., 32)
+    hash_arr = [0] * size
+    for i, val in enumerate(mixed):
+        hash_arr[i % size] = (hash_arr[i % size] + val) % 256
+    
+    # Step 4: Convert to hexadecimal
+    hash_hex = ''.join(f'{v:02x}' for v in hash_arr)
+    return hash_hex[:size]  # ensure fixed size
 
 
-# -----------------------------
-# SHA-256 Hash Function
-# -----------------------------
-def sha256_hash(input_string):
-    return hashlib.sha256(input_string.encode()).hexdigest()
+# Set up Streamlit page
+st.set_page_config(page_title="Custom Hash Function vs SHA-256", layout="wide")
 
-
-# -----------------------------
-# Streamlit App UI
-# -----------------------------
-st.set_page_config(page_title="Custom Hash vs SHA-256", page_icon="🔒", layout="centered")
-
-st.title("🔐 Custom Hash Algorithm vs SHA-256")
-st.write("**By: Priyanksha Das**")
-st.markdown("---")
-
-# Input text box
-input_text = st.text_area("Enter text to hash:", value="hello", height=150)
-
-# Compute hashes
-custom_output = custom_hash(input_text)
-sha256_output = sha256_hash(input_text)
-
-# Display outputs
-st.subheader("🧮 Hash Results")
-col1, col2 = st.columns(2)
-with col1:
-    st.write("### Custom Hash Output:")
-    st.code(custom_output, language="text")
-with col2:
-    st.write("### SHA-256 Output:")
-    st.code(sha256_output, language="text")
-
-# Demonstrate difference for small input change
-st.markdown("---")
-st.subheader("🔍 Small Change Demonstration")
-
-# Input with slight change
-slight_change = input_text + "!"
-custom_changed = custom_hash(slight_change)
-sha256_changed = sha256_hash(slight_change)
-
-st.write(f"Original Input: `{input_text}`")
-st.write(f"Modified Input: `{slight_change}`")
-
-st.write("### Custom Hash Comparison")
-st.code(f"Original: {custom_output}\nChanged : {custom_changed}")
-
-st.write("### SHA-256 Comparison")
-st.code(f"Original: {sha256_output}\nChanged : {sha256_changed}")
-
-st.markdown("---")
-st.success("✅ Same input → same hash; Small change → drastically different hash!")
-st.info("Compare how both custom and SHA-256 behave with input changes.")
-
-# Footer
+# Title and description
+st.title("Custom Hash Function vs SHA-256")
+st.subheader("A web app to compare a custom hash function with SHA-256.")
 st.markdown("""
----
-**Project Summary**
-- Implements a custom hash function using ASCII manipulation, shifts, and modular arithmetic.
-- Compares it with SHA-256 using Python’s hashlib.
-- Demonstrates hashing fundamentals visually.
+    - Input any string to get its **Custom Hash** and compare it with the **SHA-256** hash.
+    - The custom hash is generated based on ASCII manipulation, modular arithmetic, and compression.
+    - **Small input changes** lead to **drastic differences** in the hash.
+    """)
 
-**Developed by:** Adhiyaman B
+# Sidebar with instructions and settings
+with st.sidebar:
+    st.header("Instructions")
+    st.markdown("""
+        1. Enter a string in the text box below.
+        2. Click **Generate Hash** to see the custom hash and compare it with SHA-256.
+        3. Check the results in real-time.
+    """)
+
+# User input: Text box for input string
+input_text = st.text_area("Enter the string to hash", height=150, value="hello")
+
+# Button to trigger the hash generation
+if st.button("Generate Hash"):
+    # Generate the custom hash
+    custom_hashed = custom_hash(input_text)
+    
+    # Generate the SHA-256 hash using hashlib
+    sha256_hashed = hashlib.sha256(input_text.encode()).hexdigest()[:32]
+    
+    # Display the results
+    st.write(f"### Custom Hash for '{input_text}':")
+    st.code(custom_hashed, language='text')
+    
+    st.write(f"### SHA-256 Hash for '{input_text}':")
+    st.code(sha256_hashed, language='text')
+
+    # Show a comparison
+    if custom_hashed == sha256_hashed:
+        st.success("The hashes match!")
+    else:
+        st.warning("The hashes do not match!")
+
+    # Visual separator
+    st.markdown("---")
+
+# Show footer message
+st.markdown("""
+    ### By Adhiyaman B
+    GitHub: [https://github.com/Adhhiiiiiiii/custom-hash-streamlit]
 """)
