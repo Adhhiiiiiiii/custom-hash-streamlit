@@ -91,7 +91,6 @@ else:
 
 # Footer section with GitHub link
 st.markdown("""
-    ### By Priyanksha Das
-    USN: [Add your USN here]
-    GitHub: [Add your GitHub link here]
+    ### By Adhiyaman Babu
+    GitHub: [https://github.com/Adhhiiiiiiii/custom-hash-streamlit]
 """)
