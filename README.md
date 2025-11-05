@@ -82,16 +82,12 @@ For example:
 streamlit==1.11.1
 ````
 ---
-## License
-
-This project is open-source and edutional purpose available to all.
-
-## Author
-
-* **Adhiyaman Babu**
-* [GitHub Profile](https://github.com/Adhhiiiiiiii)
 
 ## Acknowledgments
 
 * **Streamlit**: For providing an easy-to-use framework to build web applications.
 * **hashlib**: For the cryptographic hashing functions in Python.
+
+## License
+
+This project is open-source and educational purpose available to all.
