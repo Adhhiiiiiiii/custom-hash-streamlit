@@ -24,14 +24,14 @@ def custom_hash(text, size=32):
     hash_hex = ''.join(f'{v:02x}' for v in hash_arr)
     return hash_hex[:size]  # ensure fixed size
 
-# Set up Streamlit page with themes
+# Set up Streamlit page
 st.set_page_config(page_title="Custom Hash Function vs SHA-256", layout="wide")
 
 # Title and description
 st.title("🔒 Custom Hash Function vs SHA-256")
 st.subheader("A web app to compare a custom hash function with SHA-256.")
 
-# Sidebar with instructions and settings
+# Sidebar with instructions
 with st.sidebar:
     st.header("📚 Instructions")
     st.markdown("""
@@ -39,28 +39,6 @@ with st.sidebar:
         2. Click **Generate Hash** to see the custom hash and compare it with SHA-256.
         3. **Small input changes** lead to **drastic differences** in the hash.
     """)
-    
-    # Theme selector
-    theme = st.radio("Select Theme", ["Light", "Dark"], index=0)
-
-    if theme == "Dark":
-        st.markdown("""
-            <style>
-            .streamlit-expanderHeader {
-                background-color: #333;
-                color: white;
-            }
-            </style>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown("""
-            <style>
-            .streamlit-expanderHeader {
-                background-color: #fff;
-                color: #000;
-            }
-            </style>
-        """, unsafe_allow_html=True)
 
 # Input validation and text box
 input_text = st.text_area("🔑 Enter the string to hash:", height=150, value="hello")
